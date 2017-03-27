@@ -25,3 +25,10 @@ citus# SELECT citus_relation_size('foobar');
   (1 row)
 ```
 
+## User management
+
+* citus_user_on_workers(command);
+* citus_drop_user_on_workers(username);
+* citus_create_user_on_workers(username);
+* citus_user_set_password_on_workers(username, password);
+* citus_sync_user_on_workers(username);
