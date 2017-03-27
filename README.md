@@ -11,4 +11,17 @@ equivalent to `pg_relation_size()`
 
 On the primary node type
 
-`db$ SELECT citus_relation_size('foobar');`
+```
+citus# SELECT pg_relation_size('foobar');
+ pg_relation_size
+ ------------------
+                 0
+                 (1 row)
+
+citus# SELECT citus_relation_size('foobar');
+ citus_relation_size
+ ---------------------
+  65536
+  (1 row)
+```
+

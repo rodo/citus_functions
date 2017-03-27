@@ -6,7 +6,6 @@ DROP FUNCTION IF EXISTS citus_relation_size(regclass);
 CREATE FUNCTION citus_relation_size(rel regclass) RETURNS text AS $BODY$
 DECLARE
     nodes RECORD;
-    workers integer;
     connstr text;
     cmd text;
     global_result boolean;
@@ -31,7 +30,6 @@ BEGIN
 
         cmd := 'SELECT pg_relation_size(' || quote_literal (rel::text || '_' || nodes.shardid) || ')';
     
-
         BEGIN
         SELECT * FROM dblink(connstr, cmd )
         AS t1(relsize bigint)
@@ -43,16 +41,8 @@ BEGIN
              GET STACKED DIAGNOSTICS text_var1 = MESSAGE_TEXT,
                                      text_var2 = PG_EXCEPTION_DETAIL,
                                      text_var3 = PG_EXCEPTION_HINT;
-
-             global_result := false;
         END;
 
-        BEGIN
-        -- finally close the link
-        PERFORM (dblink_disconnect('citus_tool'));
-            EXCEPTION WHEN OTHERS THEN
-                global_result := false;
-        END;
     END LOOP;
 
     RETURN relsize;
